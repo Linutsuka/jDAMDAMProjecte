@@ -3,6 +3,7 @@ package jDAMDAM1Projecte;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class LineaFactura {
 	
@@ -11,6 +12,7 @@ public class LineaFactura {
 		protected String codi_producte;
 		protected int preu;
 		protected int quantitat;
+		protected ArrayList<LineaFactura> linees = new ArrayList<LineaFactura>();
 		
 		public LineaFactura(int factura, int nlinea, String codi, int preu, int quantitat) {
 			this.nfactura = factura; this.nlinea = nlinea; this.codi_producte = codi; this.preu = preu; this.quantitat = quantitat;
@@ -46,12 +48,25 @@ public class LineaFactura {
 		public void setQuantitat(int quantitat) {
 			this.quantitat = quantitat;
 		}
-		public void afegirLinea(Connection con, LineaFactura linea []) throws SQLException {
-		Statement declaracio=con.createStatement();
-		for(int i = 0; i < linea.length; i++) {
-			 declaracio.executeUpdate("INSERT INTO linea VALUES('"+linea[i].getnFactura()+"','"+linea[i].getnLinea()+"','"+
-				 		linea[i].getCodi()+"','"+linea[i].getQuantitat()+"');");
+		public void afegir(LineaFactura factura) {
+			factura.linees.add(factura);
 		}
+		public LineaFactura agafar(int factura) {
+			int k = 0;
+			while(k < linees.size() && (!(linees.get(k).getnFactura() == nfactura))){
+				k++;
+			}
+			if(k < linees.size()) {
+				return linees.get(k);
+			}
+			else return null;	
+		}
+		public void afegirLinea(Connection con, LineaFactura linea) throws SQLException {
+		Statement declaracio=con.createStatement();
+		
+			 declaracio.executeUpdate("INSERT INTO linea VALUES('"+linea.getnFactura()+"','"+linea.getnLinea()+"','"+
+				 		linea.getCodi()+"','"+linea.getQuantitat()+"');");
+		
 		
 	          
 		}

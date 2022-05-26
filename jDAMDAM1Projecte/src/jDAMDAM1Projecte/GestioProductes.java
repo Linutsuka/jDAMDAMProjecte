@@ -7,8 +7,9 @@ import java.util.Scanner;
 public class GestioProductes {
 
 	public static void main(String[] args) {
-		Scanner lector = new Scanner(System.in);
+		Scanner lector = new Scanner(System.in); //EL CODI QUE ET DEMANA ES EL CODI DE LA TAULA ADMINISTRADORS, EL TEU CODI ES [mias] AMB CONTRANSEYA [adm]
 		Producte inventari = new Producte();
+		Client inventarii = new Client();
 		String usuariPermanent="";
 		boolean open = true; char ver; boolean openP = true;
 		try
@@ -26,10 +27,11 @@ public class GestioProductes {
         			inventari.afegir(aux);
         		}
             }
+            jDAMDAM1Projecte.Funcions.inventariRestore(stmt, inventarii);
             
             do {
-            	System.out.println("\t**Benvolgut a [GestioProducte]\n**Introdueixi el seu codi per continuar:");
-            	String codi = lector.nextLine();
+            	System.out.println("\t**Benvolgut a [GestioAdministradors]\n**Introdueixi el seu codi per continuar:");
+            	String codi = lector.nextLine().toLowerCase();
             	ResultSet rs = stmt.executeQuery("select codi from adm where codi='"+codi+"';");
             	//System.out.println("\t**Benvolgut a [GestioProducte]\n\tSeleccioni gestió:");
             	while(!(rs.next())) {
@@ -39,8 +41,8 @@ public class GestioProductes {
             	}
             	
             		do {
-            			System.out.println("\t**Benvolgut a [GestioProducte]\n\tSeleccioni gestió:");
-            			System.out.println("\t\t 1*Alta Producte\n\t\t 2*Modificar Producte \n\t\t 3*Baixa Producte\n\t\t 4*Canviar d'usuari\n\t\t 5*Sortir");
+            			System.out.println("\t**Benvolgut a [GestioAdministradors]\n\tSeleccioni gestió:");
+            			System.out.println("\t\t 1*Alta Producte\n\t\t 2*Modificar Producte \n\t\t 3*Baixa Producte\n\t\t 4*Canviar d'usuari\n\t\t 5*Veure client\n\t\t 6*Veure clients\n\t\t 7*Sortir");
             			String entrar = lector.nextLine();
             			switch(entrar) {
             				case"1": //ALTA PRODUCTE
@@ -196,7 +198,33 @@ public class GestioProductes {
             					openP=false;
             						
             					break;
-            				case"5": //SORTIR
+            				case"5"://VEURE DADES 1 CLIENT
+            					System.out.println("**--VEURE CLIENT--**");
+            					System.out.println("**VERIFICACIO: Vols veure un client?[y/n]");
+            					ver = lector.nextLine().toLowerCase().charAt(0);
+            					if(ver == 'y') {
+            						System.out.println("Introdueix DNI del client");
+            						String dni = lector.nextLine();
+            						rs = stmt.executeQuery("select dni from client where dni='"+dni+"';");
+        							while(!(rs.next())) {
+        								System.out.println("Introdueix DNI del client"); //LO PREGUNTARA HASTA QUE LO SEA
+        								dni = lector.nextLine();
+        								stmt.executeQuery("select dni from client where dni='"+dni+"';");
+        							}
+        							inventarii.veureClient(dni);
+            							
+            						
+            					}
+            					break;
+            				case"6"://VEURE CLIENTS
+            					System.out.println("**--VEURE CLIENT--**");
+            					System.out.println("**VERIFICACIO: Vols veure els clients registrats?[y/n]");
+            					ver = lector.nextLine().toLowerCase().charAt(0);
+            					if(ver == 'y') {
+            						inventarii.veureClients(inventarii.clients);System.out.println("");
+            					}
+            					break;
+            				case"7": //SORTIR
             					openP = false;
             					open = false;
             					break;

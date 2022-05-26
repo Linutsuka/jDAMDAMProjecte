@@ -13,6 +13,7 @@ public class EntradaBotiga {
 		Client inventari = new Client();
 		Producte inventarii = new Producte(); String usuari ="";
 		Factura inventariii = new Factura();
+		LineaFactura inventariL = new LineaFactura();
 		
 		boolean open = true;
 		try {
@@ -21,6 +22,8 @@ public class EntradaBotiga {
             do {
 				jDAMDAM1Projecte.Funcions.inventariRestore(stmt, inventari);
 				jDAMDAM1Projecte.Funcions.inventariRestore(stmt, inventarii);
+				jDAMDAM1Projecte.Funcions.inventariRestore(stmt, inventariii);
+				//jDAMDAM1Projecte.Funcions.inventariRestore(stmt, inventariL);
 				System.out.println("\t\t**Benvolgut a La Botiga Virtual**");
 				
 				System.out.println("Introdueixi el seu dni per continuar");
@@ -51,7 +54,7 @@ public class EntradaBotiga {
 				}
 				boolean openP =true;
 				do {
-						System.out.println("Seleccioni una opció:    1*Veure Productes \n\t\t\t 2*Comprar Producte\n\t\t\t 3*Veure Factures");
+						System.out.println("Seleccioni una opció:    1*Veure Productes \n\t\t\t 2*Comprar Producte\n\t\t\t 4*Configuració\n\t\t 5*Sortir usuari\n\t\t 6*Sortir");
 						String entrar = lector.nextLine();
 						switch(entrar) {
 						case "1": //VEURE PRODUCTE
@@ -117,11 +120,11 @@ public class EntradaBotiga {
 										System.out.println(carret.get(i).getCodi() +" - "+carret.get(i).getNom() +" - PREU" + carret.get(i).getPreu() +" - QUANTITAT"+ quantitat.get(i));
 									}
 									char fin = 'l';
-									lector.nextLine();
-									System.out.println("Vol esborrar o canviar canviar alguna linea\nEsborrar[e]\nQuanitat?[q]Comprar[d]");
-									fin = lector.nextLine().toLowerCase().charAt(0);
+									//lector.nextLine();
+									//System.out.println("Vol esborrar o canviar canviar alguna linea\nEsborrar[e]\nQuanitat?[q]\nComprar[d]");
+									//fin = lector.nextLine().toLowerCase().charAt(0);
 									while(!(fin == 'c')) {
-										System.out.println("Vol esborrar o canviar canviar alguna linea\nEsborrar[e]\nQuanitat?[q]Comprar[d]");
+										System.out.println("Vol esborrar o canviar canviar alguna linea\nEsborrar[e]\nQuanitat?\n[q]\nComprar[d]");
 										fin = lector.nextLine().toLowerCase().charAt(0);
 										if(fin == 'e') {
 											System.out.println("Introdueixi codi per esborrar");;
@@ -159,6 +162,7 @@ public class EntradaBotiga {
 										else if(fin == 'd') {
 											System.out.println("\n\t\t**FACTURA**");
 											int nFactura=0; int nCops = carret.size();int k=0; LineaFactura linea[] = new LineaFactura[nCops];
+											rs = stmt.executeQuery("select nfactura from factura");
 											while( k < nCops) {
 												while(rs.next()) {
 													nFactura = rs.getRow(); //COGE EL ULTIMO VALOR DEL SELECT OSEA EL NUMERO DE FILAS Q HAY
@@ -172,14 +176,19 @@ public class EntradaBotiga {
 												k++;
 												
 											}
-											System.out.println("a");
+											/////
 											Client usuariI = inventari.agafar(usuari);
 											LocalDate avui = LocalDate.now();
 											//AFEGIR A LA BD
 											Factura facturaNew = new Factura(nFactura,usuariI,avui,linea);
+											
 											facturaNew.agafarFactura(con, facturaNew);
+											Statement declaracio=con.createStatement();
+											
 											for(int i = 0; i < linea.length;i++) {
-												linea[i].afegirLinea(con, linea);
+												linea[i].afegirLinea(con, linea[i]);
+												System.out.println(i);
+											
 											}
 											
 											//mostrar factura
@@ -207,15 +216,47 @@ public class EntradaBotiga {
         							while(rs.next()) {
             							System.out.println(rs.getInt("nfactura")+"\t\t"+rs.getDate("data"));
             						}
-        						System.out.println("Seleccioni una de les factures");
+        						System.out.println("Seleccioni una de les factures. Per cancelar [9999]"); //ACABAR
         						int fact = 0;
         						fact = jDAMDAM1Projecte.Funcions.verifyNumberFrase(fact, "Seleccioni una de les factures");
+        						rs = stmt.executeQuery("select nfactura,nlinea,codi_producte,quantitat from linea where nfactura='"+fact+"';");
+        						int cd=0;
+        						while(rs.next()) {
+        							
+        							
+        							/*LineaFactura aux = inventariL.agafar(fact);
+        							Factura a = new Factura();
+        							int u=0;
+        							for(int i = 0;i < aux.linees.size();i++) {
+        								if(fact == aux.linees.get(i).getnFactura()) {
+        									u++;
+        								}
+        							}
+        							LineaFactura taula[]= new LineaFactura[u];
+        							for(int i = 0;i < aux.linees.size();i++) {
+        								if(fact == aux.linees.get(i).getnFactura()) {
+        									taula[i] = aux.linees.get(i).agafar(fact);
+        								}
+        							}
+        							a.mostrarFactura(con, stmt, fact, inventari, taula);
+        							*/
+        						}
         						
         						//acabar
         					}
         					else {
         						System.out.println("**SORTINT DE [VEURE FACTURES]");
         					}
+							break;
+						case"4":
+							jDAMDAM1Projecte.GestioClients.gestioClient();
+							break;
+						case"5":
+							openP = false;
+							break;
+						case "6":
+							openP =false;
+							open =false;
 							break;
 						}
 				}

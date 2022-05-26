@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Funcions {
@@ -93,6 +94,23 @@ public class Funcions {
           }
           return inventari;
 	}
+	public static LineaFactura  inventariRestore(Statement stmt,LineaFactura inventari) throws SQLException {
+		  ResultSet rr=stmt.executeQuery("select nfactura,nlinea,codi_producte,quantitat from linea;");
+          while(rr.next()) {
+          	int c = rr.getInt("nfactura"); int n = rr.getInt("nlinea"); String s  = rr.getString("codi_producte");
+          	int p = rr.getInt("quantitat");
+          	ResultSet rs = stmt.executeQuery("select preu from producte where codi_producte='"+s+"';"); int preu=0;
+          	if(rs.next()) {
+          		preu = rs.getInt("preu");
+          	}
+          	LineaFactura aux = new LineaFactura(c,n,s,p,preu);
+          	inventari.afegir(aux);
+          	if(!(inventari.linees.contains(aux))) {
+      			inventari.afegir(aux);
+      		}
+          }
+          return inventari;
+	}
 	public static Client inventariRestore(Statement stmt,Client inventari) throws SQLException {
 		ResultSet rr = stmt.executeQuery("select dni,nom,telefon,correu,adreca,contrasenya,actiu from client;");
     	while((rr.next())) {
@@ -106,16 +124,48 @@ public class Funcions {
     	}
     	return inventari;
 	}
-	public static Factura inventariRestore(Statement stmt,Factura inventari,Client inv) throws SQLException {
-		ResultSet rr = stmt.executeQuery("select nfactura,dni data from factura;");
+	public static Factura inventariRestore(Statement stmt,Factura inventari) throws SQLException {
+		ResultSet rr = stmt.executeQuery("select nfactura,dni,data from factura;");
 		while((rr.next())) {
-			LineaFactura linea[] = new LineaFactura[2];
-			
-			
-			int n = rr.getInt("factura"); String d = rr.getString("dni");
-			
-			ResultSet ri = stmt.executeQuery("select nfactura,nlinea,codi_producte,quantitat");
-			//ACABAR
+    		int d = rr.getInt("nfactura"); String n = rr.getString("dni");
+    		String dataa = rr.getDate("data").toString();
+			String[] separador = dataa.split("-");
+			int year = Integer.parseInt(separador[0]);
+			int month = Integer.parseInt(separador[1]);
+			int dayOfMonth = Integer.parseInt(separador[2]);
+			LocalDate dia = LocalDate.of(year, month, dayOfMonth);
+			Client au = new Client();
+			au = au.agafar(n);
+    		Factura aux = new Factura(d,au,dia);
+    		if(!(inventari.factures.contains(aux))) {
+    			inventari.afegir(aux);
+    		}
+    	}
+    	return inventari;
+	}
+	/*public static Factura inventariRestore(Statement stmt,Factura inventari,Client inv) throws SQLException {
+		ResultSet rr = stmt.executeQuery("select nfactura,dni,data from factura;");
+		while((rr.next())) {
+			int n = rr.getInt("factura"); String d = rr.getString("dni"); int num=0;
+			ResultSet re = stmt.executeQuery("select nfactura,nlinea,codi_producte,quantitat where nfactura='"+n+"';");
+			while(re.next()) {
+				num++;
+			}
+			ResultSet ri = stmt.executeQuery("select nfactura,nlinea,codi_producte,quantitat where nfactura='"+n+"';");
+			int k = 0;
+			LineaFactura linea[] = new LineaFactura[num];
+			while(ri.next()) {
+				int nn = ri.getInt("nfactura");  int ni = ri.getInt("nilinea"); String cc = ri.getString("codi_producte");
+				int qnt = ri.getInt("quantitat");
+				ResultSet a = stmt.executeQuery("select preu from producte where codi_producte='"+cc+"';");
+				int preu=0;
+				if(a.next()) {
+					preu = a.getInt("preu");
+				}
+				LineaFactura aux= new LineaFactura(nn,ni,cc,preu, qnt);
+				linea[k] = aux;
+				k++;
+			}
 			String dataa = rr.getDate("data").toString();
 			String[] separador = dataa.split("-");
 			int year = Integer.parseInt(separador[0]);
@@ -129,7 +179,7 @@ public class Funcions {
     		}
 		}
 		return inventari;
-	}
+	}*/
 	public static void modificarDades(Connection con,Statement stmt, String usuariPermanent,Client inventari) throws SQLException {
 		Scanner lector = new Scanner(System.in);
 		

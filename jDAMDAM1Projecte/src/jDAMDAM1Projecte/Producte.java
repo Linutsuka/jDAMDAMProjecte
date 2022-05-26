@@ -103,7 +103,16 @@ public class Producte {
 		for(int i = 0; i < inventari.productes.size(); i++) {
 		
 			if(inventari.productes.get(i).getEstat() != false && inventari.productes.get(i).getStock() != 0) {
-				System.out.println(inventari.productes.get(i).getCodi() +" - "+ inventari.productes.get(i).getNom()+" - "+ 	inventari.productes.get(i).getPreu() +" - " + inventari.productes.get(i).getIva() + " - " + inventari.productes.get(i).getStock());
+				String nom =inventari.productes.get(i).getNom();
+				nom=String.format("%-50s", nom);
+				String codi=inventari.productes.get(i).getCodi();
+				codi=String.format("%-4s", codi);
+				String preu =String.valueOf(inventari.productes.get(i).getPreu());
+				preu=String.format("%-3s",preu);
+				String iva =String.valueOf(inventari.productes.get(i).getIva());
+				iva=String.format("%-2s",iva);
+						
+				System.out.println("["+codi +"] - "+ nom+" - "+preu+"€ - " + iva + "% - " + inventari.productes.get(i).getStock());
 			}	
 		}
 	}

@@ -93,7 +93,22 @@ public class Client {
 		agafar(dni).setEstat(false);
 	}
 	
-	
+	public void veureClients(ArrayList<Client> inventari) {
+		boolean estat = false; String estatNom ="ACTIU";
+		for(int i = 0; i < inventari.size();i++) {
+			if(inventari.get(i).getEstat() == false) {
+				estatNom = "NO-ACTIU";
+			}
+			System.out.println(i+"-"+inventari.get(i).getDni()+"-"+inventari.get(i).getNom()+"-"+inventari.get(i).getMail()+"-"+inventari.get(i).getTelefon()+"-"+inventari.get(i).getAdreca()+"-"+estatNom);
+		}
+	}
+	public void veureClient(String dni) {
+		boolean estat = false; String estatNom ="ACTIU";
+		if(agafar(dni).getEstat() == false) {
+			estatNom ="NO-ACTIU";
+		}
+		System.out.println(agafar(dni).getDni()+"-"+agafar(dni).getNom()+"-"+agafar(dni).getMail()+"-"+agafar(dni).getTelefon()+"-"+agafar(dni).getAdreca()+"-"+agafar(dni).getEstat());
+	}
 	
 	
 

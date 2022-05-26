@@ -18,6 +18,9 @@ public class Factura {
 	public Factura(int nFactura, Client aux, LocalDate date, LineaFactura linea []) {
 		this.nFactura = nFactura; this.aux = aux; this.factura = date; this.linea =  linea;
 	}
+	public Factura(int nFactura, Client aux, LocalDate date) {
+		this.nFactura = nFactura; this.aux = aux; this.factura = date;
+	}
 	public Factura() {
 		
 	}
@@ -49,7 +52,7 @@ public class Factura {
 		System.out.println("["+this.getFactura()+"]\t\t\t" + this.getLocalDate());
 		String espacis="--------------------------------------------------";
 		System.out.println("\tDescripció\t\tTotal");
-		System.out.println("\t----------\t\t-----"); double total =0;
+		System.out.println("\t----------\t\t-----"); double total =0; int iva = 0; int base =0; double ivaDecimals=0;
 		ArrayList<Integer> agafarIVA = new ArrayList<Integer>();
 		for(int i = 0; i < linea.length;i++) {
 			ResultSet rs = stmt.executeQuery("select nom,iva from producte where codi_producte='"+ linea[i].getCodi()+"';");
@@ -60,6 +63,8 @@ public class Factura {
 				nom=String.format("%-30s", nom);
 				//agafarIVA.add(rs.getInt("iva")); //CALCUL TOTAL
 				double ivaCalcul =  (double)rs.getInt("iva")/100;
+				ivaDecimals=ivaDecimals+ivaCalcul;
+				
 				total = ((linea[i].getPreu() + ivaCalcul) * linea[i].getQuantitat())   + total;
 			}
 
@@ -71,8 +76,13 @@ public class Factura {
 		String texte = "TOTAL EUROS.....:";
 		texte= String.format("%-33s", texte);
 		//
-		System.out.println(texte+""+total);
-		System.out.println("Nm d'articles" + linea.length+"\nCompra realitzada en: Botiga Vertual\nTipus de pagament: Targeta");
+		System.out.println(texte+""+total+"€");
+		System.out.println("Nm d'articles" + linea.length+"\nCompra realitzada en: Botiga Vertual\nTipus de pagament: Targeta\n");
+		System.out.println(espacis);
+		texte = String.format("%-33s", "TOTAL IVA:");
+		System.out.println(texte + ivaDecimals+"€ \n");
+		
+		
 		//IVA
 		
 	}
