@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalDate;
-public class EntradaBotiga {
+public class ProgramaClient {
 
 	public static void main(String[] args) {
 		Scanner lector = new Scanner(System.in);
@@ -30,9 +30,11 @@ public class EntradaBotiga {
 				 usuari = lector.nextLine();
 				ResultSet rs = stmt.executeQuery("select dni from client where dni='"+usuari+"';");
 				char v='p';
+				String texte1= "**ERROR DE VALIDACIÓ: " + usuari +"No trobat a la base de dades";
+				String texte2= "Tornar a vàlidar? Si no es vàlida es rediccionarà a [Alta Usuari] [y/n]";
 				while(!(rs.next() && v != 'n')) {
-					System.out.println("**ERROR DE VALIDACIÓ: " + usuari +"No trobat a la base de dades");
-					System.out.println("Tornar a vàlidar? Si no es vàlida es rediccionarà a [Alta Usuari] [y/n]");
+					System.out.println(texte1);
+					System.out.println(texte2);
 					v = lector.nextLine().toLowerCase().charAt(0);
 					if(v == 'y') {
 						System.out.println("Introdueixi el seu dni per continuar");
@@ -40,9 +42,15 @@ public class EntradaBotiga {
 						rs = stmt.executeQuery("select dni from client where dni='"+usuari+"';");
 					}
 					else if(v == 'n') {
-						jDAMDAM1Projecte.Funcions.altaClient(con, stmt, inventari);
+						usuari = jDAMDAM1Projecte.Funcions.altaClient(con, stmt, inventari);
+					System.out.println("d");
+					 rs = stmt.executeQuery("select dni from client where dni='"+usuari+"';");
+					 texte1 = "El seu dni s'ha vàlidat a la base de dades:";
+					 texte2="Si vol validar-se clickar lletra [y]\nSi vol crear un altre un altre usuari cliclar[n]";
+						
 					}
 				}
+				System.out.println("a");
 				//FALTA ENVIAR A ALTAUSUARI
 				System.out.println("Introdueixi la seva contrasenya");
 				String cont = lector.nextLine();
@@ -249,7 +257,7 @@ public class EntradaBotiga {
         					}
 							break;
 						case"4":
-							jDAMDAM1Projecte.GestioClients.gestioClient();
+							jDAMDAM1Projecte.GestioClient.gestioClient();
 							break;
 						case"5":
 							openP = false;

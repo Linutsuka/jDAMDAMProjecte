@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 
 import java.time.LocalDate;
-public class GestioClients {
+public class GestioClient {
 
 	public static void gestioClient() {
 		//COMPRAR I TREUE Modificaraltre
@@ -34,7 +34,7 @@ public class GestioClients {
             		
             	}
             	System.out.println("\t**Benvolgut a [GestioClients]\n\tSeleccioni gestió:");
-            	System.out.println("\t\t 1*Alta Client\n\t\t 2*Modificació Dades Client\n\t\t 3*Entrar com Usuari\n\t\t 4*Sortir com Usuari\n\t\t 5*Esborrar Client \n\t\t 6*Sortir");
+            	System.out.println("\n\t\t 2*Modificació Dades Client\n\t\t 3*Entrar com Usuari\n\t\t 5*Esborrar Client \n\t\t 6*Sortir");
             	String entrar = lector.nextLine();
             	switch(entrar) {
             	case"1"://ALTA CLIENT

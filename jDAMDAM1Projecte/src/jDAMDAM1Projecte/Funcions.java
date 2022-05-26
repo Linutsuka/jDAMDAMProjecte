@@ -258,15 +258,15 @@ public class Funcions {
 				}
 			}
 		}
-		public static void  altaClient(Connection con,Statement stmt,Client inventari) throws SQLException {
+		public static String  altaClient(Connection con,Statement stmt,Client inventari) throws SQLException {
 			Scanner lector = new Scanner(System.in);
 			char ver;
-			System.out.println("**--ALTA CLIENT--**");
+			System.out.println("**--ALTA CLIENT--**");String dni="";
 			System.out.println("**VERIFICACIO: Vols crear un client?[y/n]");
 			ver = lector.nextLine().toLowerCase().charAt(0);
 			if(ver == 'y') {
 				System.out.println("Introdueix DNI");
-				String dni = lector.nextLine();
+				 dni = lector.nextLine();
 					while(!(jDAMDAM1Projecte.Funcions.verifyDNI(dni))) { //VERIFICO SI ES UN DNI 9 NUMEROS Y 1 LETRA
 						System.out.println("Introdueix DNI"); //LO PREGUNTARA HASTA QUE LO SEA
 						dni = lector.nextLine();
@@ -299,7 +299,7 @@ public class Funcions {
 					mail = lector.nextLine();
 				}
 				System.out.println("Introdueixi ADREÇA");
-				String adreca = lector.nextLine();
+				String adreca =""; adreca =lector.nextLine();
 				boolean actiu = true;
 				boolean correcte = false;
 				String contrasenya ="";
@@ -314,13 +314,13 @@ public class Funcions {
 							correcte = true;
 						}
 				}
-				Client aux = new Client(dni,nom,telefon,mail,adreca,contrasenya,actiu); inventari.afegir(aux);
+				Client aux = new Client(dni,nom,telefon,mail,adreca,contrasenya,actiu); 
 				Statement declaracio=con.createStatement();
 				declaracio.executeUpdate("INSERT INTO client VALUES ('"+dni+"','"+nom+"','"+mail+"','"+telefon+"','"+adreca+"','"+contrasenya+"',"+actiu+");");
 		
 			}
 			else System.out.println("*--SORTINT DE [ALTA CLIENT]");
-			
+			return dni;
 		}
 	}
 	

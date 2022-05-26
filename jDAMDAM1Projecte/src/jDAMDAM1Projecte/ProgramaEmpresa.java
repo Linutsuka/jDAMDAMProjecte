@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Scanner;
-public class GestioProductes {
+public class ProgramaEmpresa {
 
 	public static void main(String[] args) {
 		Scanner lector = new Scanner(System.in); //EL CODI QUE ET DEMANA ES EL CODI DE LA TAULA ADMINISTRADORS, EL TEU CODI ES [mias] AMB CONTRANSEYA [adm]
@@ -191,6 +191,7 @@ public class GestioProductes {
                 						 codiP = lector.nextLine();
                 						 rs = stmt.executeQuery("select codi_producte from producte where codi_producte='"+codiP+"';");
             						}
+            						System.out.println("**PRODUCTE" + codiP+" ESBORRAT AMB ÈXIT");
             						inventari.baixaProducte(con, codiP);
             					}
             					break;
