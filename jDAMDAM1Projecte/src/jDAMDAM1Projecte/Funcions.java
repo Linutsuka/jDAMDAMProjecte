@@ -32,9 +32,9 @@ public class Funcions {
 			}
 		}
 		if(dniPassed) {
-			System.out.println("DNI acceptat");
+			System.out.println("[DNI ACCEPTAT]");
 		}
-		else System.out.println("DNI denegat");
+		else System.out.println("[DNI DENEGAT]   [ERROR DE FORMA/o TAMANY]");
 		return dniPassed;
 	}
 	public static boolean verifyMail(String mail) {
@@ -321,6 +321,20 @@ public class Funcions {
 			}
 			else System.out.println("*--SORTINT DE [ALTA CLIENT]");
 			return dni;
+		}
+		
+		public static String trobarNom(Connection con, Statement stmt,int nFactura) throws SQLException {
+			ResultSet rs = stmt.executeQuery("select nom from client c inner join factura f on c.dni=f.dni where nfactura ='"+nFactura+"';");
+			String nom="";
+			if(rs.next()) {
+				nom = rs.getString("nom");
+			}
+			return nom;
+		}
+		public static void carretCompra(ArrayList<Producte> carret, ArrayList<Integer> quantitat) {
+			for(int i = 0; i < carret.size();i++) {
+				System.out.println(carret.get(i).getCodi() +" - "+carret.get(i).getNom() +" - PREU" + carret.get(i).getPreu() +" - QUANTITAT"+ quantitat.get(i));
+			}
 		}
 	}
 	

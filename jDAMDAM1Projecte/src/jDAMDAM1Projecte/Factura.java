@@ -49,8 +49,9 @@ public class Factura {
 		factura.factures.add(factura);
 	}
 	public void mostrarFactura(Connection con,Statement stmt,int nFactura, Client aux, LineaFactura linea []) throws SQLException {
-		System.out.println("["+this.getFactura()+"]\t\t\t" + this.getLocalDate());
 		String espacis="--------------------------------------------------";
+		System.out.println(espacis);
+		System.out.println("["+this.getFactura()+"]\t\t\t" + this.getLocalDate());
 		System.out.println("\tDescripció\t\tTotal");
 		System.out.println("\t----------\t\t-----"); double total =0; int iva = 0; int base =0; double ivaDecimals=0;
 		ArrayList<Integer> agafarIVA = new ArrayList<Integer>();
@@ -78,9 +79,11 @@ public class Factura {
 		//
 		System.out.println(texte+""+total+"€");
 		System.out.println("Nm d'articles" + linea.length+"\nCompra realitzada en: Botiga Vertual\nTipus de pagament: Targeta\n");
+		System.out.println("Compra feta per: " +jDAMDAM1Projecte.Funcions.trobarNom(con, stmt, nFactura));
 		System.out.println(espacis);
 		texte = String.format("%-33s", "TOTAL IVA:");
 		System.out.println(texte + ivaDecimals+"€ \n");
+		System.out.println(espacis);
 		
 		
 		//IVA

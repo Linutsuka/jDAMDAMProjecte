@@ -43,14 +43,14 @@ public class ProgramaClient {
 					}
 					else if(v == 'n') {
 						usuari = jDAMDAM1Projecte.Funcions.altaClient(con, stmt, inventari);
-					System.out.println("d");
+					
 					 rs = stmt.executeQuery("select dni from client where dni='"+usuari+"';");
 					 texte1 = "El seu dni s'ha vàlidat a la base de dades:";
 					 texte2="Si vol validar-se clickar lletra [y]\nSi vol crear un altre un altre usuari cliclar[n]";
 						
 					}
 				}
-				System.out.println("a");
+				
 				//FALTA ENVIAR A ALTAUSUARI
 				System.out.println("Introdueixi la seva contrasenya");
 				String cont = lector.nextLine();
@@ -72,6 +72,7 @@ public class ProgramaClient {
 						case "2": //COMPRAR PRODUCTE
 							ArrayList<Producte> carret = new ArrayList<Producte>();
 							ArrayList<Integer> quantitat = new ArrayList<Integer>();
+							
 							System.out.println("**COMPRAR PRODUCTE**");
 							System.out.println("Per finalitzar la seva compra prengui la [s]");
 							System.out.println("Per visualitzar els productes prengui la[p]");
@@ -90,6 +91,7 @@ public class ProgramaClient {
 									String cO = lector.nextLine().toLowerCase();int element = 0;
 									
 									while(!(cO.equalsIgnoreCase("s"))) {
+										jDAMDAM1Projecte.Producte.veureProductes(inventarii);
 										System.out.println("ELEMENTS A  LA LLISTA:" + carret.size());
 										System.out.println("Introdueixi codi del producte");
 										 String num = lector.nextLine();
@@ -138,8 +140,10 @@ public class ProgramaClient {
 											System.out.println("Introdueixi codi per esborrar");;
 											String codi = lector.nextLine();
 											if(jDAMDAM1Projecte.Producte.esborrarCOMPRALINEA(codi, carret,quantitat)) {
-												System.out.println("**Producte esborrat de la llista**"); //preguntar si vol veure la llista actual
+												System.out.println("**Producte esborrat de la llista**");
+												jDAMDAM1Projecte.Funcions.carretCompra(carret, quantitat);//preguntar si vol veure la llista actual
 											}
+											
 											else System.out.println("Codi no cercat a la llista de la compra");
 										}
 										else if(fin == 'q') { //PRDUCTE CANVIAR QUANTITAT
@@ -161,6 +165,7 @@ public class ProgramaClient {
 													else {
 														quantitat.set(index, qnt);
 														System.out.println("*Linea canviada amb èxit*\n" + codi + " - " +qnt);
+														
 													}
 												}
 												
@@ -195,8 +200,13 @@ public class ProgramaClient {
 											
 											for(int i = 0; i < linea.length;i++) {
 												linea[i].afegirLinea(con, linea[i]);
-												System.out.println(i);
-											
+												ResultSet a = stmt.executeQuery("select stock from producte where codi_producte='"+linea[i].getCodi()+"';");
+												int stockCanviar =0;
+												if(a.next()) {
+													stockCanviar =  a.getInt("stock") - linea[i].getQuantitat();
+												}
+												Statement declaracioo = con.createStatement();
+												declaracioo.executeUpdate("UPDATE producte set stock='"+stockCanviar+"' where codi_producte ='"+ linea[i].getCodi()+"';");
 											}
 											
 											//mostrar factura
@@ -212,7 +222,7 @@ public class ProgramaClient {
 								}
 							}
 							break;
-						case"3": //VEURE FACTURES
+						case"3": //VEURE FACTURES  ESTA INACABAT EL OBJETE LINEA EM DONA ERROR**
 							System.out.println("**--VEURE FACTURES--**");
         					System.out.println("**VERIFICACIO: Vols veure una factura?[y/n]");
         					ver = lector.nextLine().toLowerCase().charAt(0);

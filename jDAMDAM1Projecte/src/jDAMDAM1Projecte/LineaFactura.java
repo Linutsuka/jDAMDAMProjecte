@@ -1,6 +1,7 @@
 package jDAMDAM1Projecte;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -62,10 +63,16 @@ public class LineaFactura {
 			else return null;	
 		}
 		public void afegirLinea(Connection con, LineaFactura linea) throws SQLException {
+			 Statement stmt=con.createStatement(0,ResultSet.CONCUR_UPDATABLE);
+			 ResultSet rs =stmt.executeQuery("select iva from producte where codi_producte='"+linea.getCodi()+"';");
+			 int iva = 0;
+			if(rs.next()) {
+				iva = rs.getInt("iva");
+			}
+			
 		Statement declaracio=con.createStatement();
-		
 			 declaracio.executeUpdate("INSERT INTO linea VALUES('"+linea.getnFactura()+"','"+linea.getnLinea()+"','"+
-				 		linea.getCodi()+"','"+linea.getQuantitat()+"');");
+				 		linea.getCodi()+"','"+linea.getQuantitat()+"','"+linea.getPreu()+"','"+iva+"');");
 		
 		
 	          
